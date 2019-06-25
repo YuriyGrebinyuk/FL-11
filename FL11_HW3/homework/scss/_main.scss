@@ -1,0 +1,236 @@
+// Write your styles here
+$colors: (
+  map-white: #ffffff
+);
+@function color($key) {
+  @if map-has-key($colors, $key) {
+    @return map-get($colors, $key);
+  }
+  @warn "Unknown `#{$key}` in $colors.";
+  @return null;
+}
+
+@mixin background($url) {
+  background: $url no-repeat center;
+  background-size: cover;
+  border-bottom-right-radius: 40%;
+  min-height: 100vh;
+  height: 100%;
+}
+
+@mixin flexbox() {
+  display: flex;
+}
+@mixin align-items($value) {
+	align-items: $value;
+}
+@mixin justify-content($value) {
+	justify-content: $value;
+}
+@mixin flex-align-center() {
+  @include flexbox();
+  @include align-items(center);
+}
+@mixin flex-justify-center() {
+  @include flexbox();
+  @include justify-content(center);
+}
+@mixin flex-align-center-justify-between() {
+  @include flexbox();
+  @include align-items(center);
+  @include justify-content(space-between);
+}
+@mixin flex-align-center-justify-around() {
+  @include flexbox();
+  @include align-items(center);
+  @include justify-content(space-around);
+}
+
+@mixin button_hover($color) {
+  &:hover {
+    background-color: darken($color, 5%);
+    transition: .2s;
+  }
+}
+
+@mixin title_before($alignment, $width, $height, $color, $bottom, $left) {
+  position: relative;
+  z-index: 1;
+  &:before {
+    content: '';
+    background-color: $color;
+    width: $width;
+    height: $height;
+    position: absolute;
+    bottom: $bottom;
+    @if $alignment == left {
+      left: $left;
+    }
+    @if $alignment == right {
+      right: 15px;
+    }
+    z-index: -1;
+  }
+}
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $background_color;
+  color: $text_color;
+  font: 18px/1.5 $general_font;
+}
+
+button {
+  border-radius: 4px;
+  color: color(map-white);
+  cursor: pointer;
+  font: 600 20px/1 $SourceSans;
+  padding: 1em 3em;
+  &:focus {
+    outline: none;
+  }
+}
+
+.general-logo {
+  @include flex-align-center();
+  p {
+    font: 600 30px/1 $general_font;
+    margin-left: 15px;
+    text-align: center;
+    span {
+      font-size: 12px;
+      display: block;
+    }
+  }
+}
+
+.header {
+  @include background($image_url);
+  .header-wrap {
+    max-width: 900px;
+    width: 100%;
+    padding: 20px 0 0 200px;
+    .landing-logo {
+      @extend .general-logo;
+      img {
+        max-width: 55px;
+        width: 100%;
+      }
+    }
+    .header_heading {
+      font: 700 90px/1 $SourceSans;
+      margin: 80px 0 65px;
+      @include title_before('left', 380px, 30px, $pseudo_color, 0px, 0px);
+    }
+    .header_text {
+      font-size: 20px;
+      margin-bottom: 65px;
+    }
+    .header_button {
+      @extend button;
+      background-color: $button_color;
+      @include button_hover($button_color);
+    }
+  }
+}
+
+.section {
+  padding: 50px 0 250px;
+  position: relative;
+  .section_text {
+    font: 600 52px/1 $SourceSans;
+    max-width: fit-content;
+    width: 100%;
+    margin: 0 auto;
+    @include title_before('right', 230px, 15px, $pseudo_color, 4px, 0px);
+  }
+  .section_card_wrap {
+    @include flex-justify-center();
+    margin: 50px 0 0;
+    .section_card {
+      background-color: $gray_background;
+      border-radius: 8px;
+      color: color(map-white);
+      padding: 25px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      &:not(:first-child) {
+        margin-left: 25px;
+      }
+      .section_card_img {
+        border-radius: 5px;
+        height: auto;
+        width: 100%;
+      }
+      .section_card_heading {
+        font: 600 30px/1.5 $SourceSans;
+        display: inline-block;
+        margin: 10px 0 20px;
+        @include title_before('left', 100%, 15px, $pseudo_color, 4px, 0px);
+      }
+      .section_card_text {
+        color: darken(color(map-white), 25%);
+        font-size: 20px;
+      }
+    }
+  }
+  .section_banner {
+    background: $banner_background;
+    border-radius: 8px;
+    @include flex-align-center-justify-between();
+    padding: 40px 120px;
+    max-width: 1200px;
+    width: 100%;
+    min-height: 180px;
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    bottom: 90px;
+    transform: translate(-50%, 100%);
+    .section_banner_text_wrap {
+      .section_banner_heading {
+        font: 700 36px/1 $SourceSans;
+        margin-bottom: 25px;
+        @include title_before('left', 75px, 15px, $pseudo_color, 0px, 145px);
+      }
+      .section_banner_text {
+        color: darken(color(map-white), 25%);
+        font-size: 20px;
+      }
+    }
+    .section_banner_button {
+      @extend button;
+      background-color: $button_color;
+      @include button_hover($button_color);
+    }
+  }
+}
+
+.footer {
+  background-color: $gray_background;
+  color: darken(color(map-white), 25%);
+  .footer-wrap {
+    @include flex-align-center-justify-around();
+    padding: 150px 0 50px;
+    .footer_logo {
+      @extend .general-logo;
+      img {
+        width: 55px;
+      }
+    }
+    .footer_text {
+      max-width: 400px;
+      width: 100%;
+    }
+    .footer-cr {
+      font-size: 20px;
+    }
+  }
+}
